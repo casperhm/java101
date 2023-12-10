@@ -115,7 +115,21 @@ public class TicTacToe {
      * @return true if the game has been won
      */
     private boolean isWon(Coordinate lastMove) {
-        return false;
+        if (board[lastMove.y()][lastMove.x()] == Status.X
+                && board[lastMove.y() + 1][lastMove.x()] == Status.X
+                && board[lastMove.y() + 2][lastMove.x()] == Status.X
+                && board[lastMove.y() - 1][lastMove.x()] == Status.X
+                && board[lastMove.y() - 2][lastMove.x()] == Status.X) {
+            return true;
+        } else if (board[lastMove.y()][lastMove.x()] == Status.X
+                && board[lastMove.y()][lastMove.x() + 1] == Status.X
+                && board[lastMove.y()][lastMove.x() + 2] == Status.X
+                && board[lastMove.y()][lastMove.x() - 1] == Status.X
+                && board[lastMove.y()][lastMove.x() - 2] == Status.X) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
