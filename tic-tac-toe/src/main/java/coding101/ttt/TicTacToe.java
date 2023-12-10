@@ -99,7 +99,14 @@ public class TicTacToe {
      * @return true if the given coordinate can be moved on
      */
     private boolean isMoveValid(Coordinate coord) {
-        return true;
+        if (coord.x() > 2
+                || coord.y() > 2
+                || board[coord.y()][coord.x()] == Status.X
+                || board[coord.y()][coord.x()] == Status.O) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
