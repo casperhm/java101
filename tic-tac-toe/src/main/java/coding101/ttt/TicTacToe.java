@@ -121,21 +121,23 @@ public class TicTacToe {
      * @return true if the game has been won
      */
     private boolean isWon(Coordinate lastMove) {
-        if (board[lastMove.y()][lastMove.x()] == Status.X
-                && board[lastMove.y() + 1][lastMove.x()] == Status.X
-                && board[lastMove.y() + 2][lastMove.x()] == Status.X
-                && board[lastMove.y() - 1][lastMove.x()] == Status.X
-                && board[lastMove.y() - 2][lastMove.x()] == Status.X) {
+        var player = board[lastMove.y()][lastMove.x()];
+        var row = lastMove.y();
+        var column = lastMove.x();
+
+        if (board[row][0] == player && board[row][1] == player && board[row][2] == player) {
             return true;
-        } else if (board[lastMove.y()][lastMove.x()] == Status.X
-                && board[lastMove.y()][lastMove.x() + 1] == Status.X
-                && board[lastMove.y()][lastMove.x() + 2] == Status.X
-                && board[lastMove.y()][lastMove.x() - 1] == Status.X
-                && board[lastMove.y()][lastMove.x() - 2] == Status.X) {
-            return true;
-        } else {
-            return false;
         }
+        if (board[0][column] == player && board[1][column] == player && board[2][column] == player) {
+            return true;
+        }
+        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+            return true;
+        }
+        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -143,7 +145,14 @@ public class TicTacToe {
      * @return true if the game is a draw
      */
     private boolean isDraw() {
-        return false;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                if (board[row][col] == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
