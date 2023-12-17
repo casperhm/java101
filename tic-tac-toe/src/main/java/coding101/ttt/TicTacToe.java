@@ -105,8 +105,8 @@ public class TicTacToe {
      * @return true if the given coordinate can be moved on
      */
     private boolean isMoveValid(Coordinate coord) {
-        if (coord.x() > 2
-                || coord.y() > 2
+        if (coord.x() >= size
+                || coord.y() >= size
                 || board[coord.y()][coord.x()] == Status.X
                 || board[coord.y()][coord.x()] == Status.O) {
             return false;
@@ -125,16 +125,63 @@ public class TicTacToe {
         var row = lastMove.y();
         var column = lastMove.x();
 
-        if (board[row][0] == player && board[row][1] == player && board[row][2] == player) {
+        // keeps track how many squaers have been checked if is equal to size someone won
+        var counter = 0;
+
+        // look for a row win
+        for (int i = 0; i < size; i++) {
+            if (board[row][i] == player) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+        if (counter == size) {
             return true;
         }
-        if (board[0][column] == player && board[1][column] == player && board[2][column] == player) {
+
+        // reset the counter
+        counter = 0;
+
+        // the same as previous loop but for columns
+        for (int i = 0; i < size; i++) {
+            if (board[i][column] == player) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+        if (counter == size) {
             return true;
         }
-        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+
+        // reset the counter
+        counter = 0;
+
+        // diagonal wining left top to rigth bottom
+        for (int i = 0; i < size; i++) {
+            if (board[i][i] == player) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+        if (counter == size) {
             return true;
         }
-        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+
+        // reset the counter
+        counter = 0;
+
+        // diagonal wining right top to left bottom
+        for (int i = 0, j = size - 1; i < size; i++, j--) {
+            if (board[i][j] == player) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+        if (counter == size) {
             return true;
         }
         return false;
@@ -156,7 +203,13 @@ public class TicTacToe {
     }
 
     public static void main(String[] args) {
-        var game = new TicTacToe(3);
+        // accept an integer size for the game board, defaulting to 3 if none provided
+        var size = (args.length > 0 ? Integer.parseInt(args[0]) : 3);
+        if (size < 2 || size > 26) {
+            System.err.println("Invalid board size, please enter a size between 2 and 26.");
+            System.exit(1);
+        }
+        var game = new TicTacToe(size);
         try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out))) {
             game.go(in, out);
