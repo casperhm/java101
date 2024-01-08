@@ -1,0 +1,10 @@
+# Test tile (0,0)
+#
+#- start: 1,1
+#- a: A
+
+AAAAA
+~~~~.
+^^^AA
+^^AAA
+===~A

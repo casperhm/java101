@@ -1,6 +1,11 @@
 .DS_Store
+.classpath
+.project
+.settings
 .gradle
+*.swp
 .vscode
 
+bin
 build
 tmp
