@@ -25,10 +25,13 @@ public class TerrainMap {
     public static final String START_META = "start";
 
     private final String name;
-    private final TerrainType[][] terrain;
     private final Map<String, String> metadata;
-    private final int width;
-    private final int height;
+
+    // following NOT final to support changes via modifyAt()... can happen after map
+    // has expanded but save file was in old (smaller) map
+    private int width;
+    private int height;
+    private TerrainType[][] terrain;
 
     /**
      * Constructor.
@@ -52,18 +55,6 @@ public class TerrainMap {
         }
         this.width = terrain[0].length;
         this.height = terrain.length;
-    }
-
-    /**
-     * Test if a player can move to a specific coordinate on this map.
-     *
-     * @param x the X coordinate to test
-     * @param y the Y coordinate to test
-     * @return {@code true} if the player is allowed to move to the given coordinate
-     */
-    public boolean canPlayerMoveTo(int x, int y) {
-        // TODO: validate player can move to specified coordinate
-        return true;
     }
 
     /**
@@ -142,7 +133,7 @@ public class TerrainMap {
      *         {@code y} are out of bounds
      */
     public final TerrainType terrainAt(int x, int y) {
-        if (x >= width || y >= height) {
+        if (x >= width || y >= height || x < 0 || y < 0) {
             return TerrainType.Empty;
         }
         return terrain[y][x];
@@ -157,8 +148,22 @@ public class TerrainMap {
      * @returns {@code true} if the terrain was changed
      */
     public final boolean modifyAt(int x, int y, TerrainType type) {
-        if (x >= width || y >= height) {
-            return false;
+        if (y >= terrain.length || x >= width) {
+            // expand rows or width with copy to new 2D array
+            final int newWidth = Math.max(x + 1, width);
+            final int newHeight = Math.max(y + 1, terrain.length);
+            TerrainType[][] newTerrain = new TerrainType[newHeight][];
+            for (int row = 0, maxRow = terrain.length; row < maxRow; row++) {
+                TerrainType[] newRow = new TerrainType[newWidth];
+                System.arraycopy(terrain[row], 0, newRow, 0, terrain[row].length);
+                newTerrain[row] = newRow;
+            }
+            for (int row = terrain.length, maxRow = newHeight; row < maxRow; row++) {
+                newTerrain[row] = new TerrainType[newWidth];
+            }
+            terrain = newTerrain;
+            width = newWidth;
+            height = newHeight;
         }
         if (terrain[y][x] != type) {
             terrain[y][x] = type;
@@ -207,6 +212,26 @@ public class TerrainMap {
         int maxRow = y + height;
         for (int row = y; row < maxRow; row++) {
             for (int col = x; col < maxCol; col++) {
+                TerrainType[] r = row < terrain.length ? terrain[row] : null;
+                TerrainType t = r != null && col < r.length ? r[col] : null;
+                out.accept(col, row, t);
+            }
+        }
+    }
+
+    /**
+     * Walk the area immediately surrounding a point, skipping the point itself.
+     *
+     * @param x   the x origin
+     * @param y   the y origin
+     * @param out the destination
+     */
+    public void walkSurrounding(int x, int y, TerrainConsumer out) {
+        for (int row = Math.max(0, y - 1), maxRow = Math.min(height - 1, y + 1); row <= maxRow; row++) {
+            for (int col = Math.max(0, x - 1), maxCol = Math.min(width - 1, x + 1); col <= maxCol; col++) {
+                if (col == x && row == y) {
+                    continue;
+                }
                 TerrainType[] r = row < terrain.length ? terrain[row] : null;
                 TerrainType t = r != null && col < r.length ? r[col] : null;
                 out.accept(col, row, t);
