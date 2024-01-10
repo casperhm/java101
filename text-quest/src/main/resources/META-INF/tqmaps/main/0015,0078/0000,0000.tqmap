@@ -1,0 +1,29 @@
+#   A mountain        O cave
+#   ~ water           & ship
+#   . grass           * town
+#   ^ forest
+#   = lava
+#   , sand
+#
+#- start: 69,14
+#
+#        1         2         3         4         5         6         7         8         9         C
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAA
+AAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAA
+AAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~&~~~~~~~^^^^^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~O~~~~~~~~~~~~~~~~~^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^AAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~^^^^^^^^^^^^^^^^OAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^^^^^AAAAAAAAAAA
+AAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AA~~AAAAAAAAAAAAAAAAAAAAAAA
+AAAAA^^^^^^^^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~~AAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
