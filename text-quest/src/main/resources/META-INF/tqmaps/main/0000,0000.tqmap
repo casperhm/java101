@@ -1,11 +1,13 @@
 # Size: 100x100
 #
 #   A mountain        O cave
-#   ~ water           & ship
-#   . grass           * town
+#   m hill            & ship
+#   ~ water           * town
+#   , sand
+#   . grass
 #   ^ forest
 #   = lava
-#   , sand
+#   " lava rock
 #
 #- start: 26,44
 #
