@@ -348,23 +348,15 @@ public class Player {
      */
     public boolean visited(TerrainMap map, int x, int y) {
         assert map != null;
-<<<<<<< HEAD
         // DUNNIIT: walking on lava should decrease player's health
         if (map.terrainAt(x, y) == TerrainType.Lava) {
             this.health -= config.lavaHealthDamage();
         }
-        // update the visited state of this coordinate by setting to a non-null value;
-        // the actual type used does not matter, we merely chose to use Town
-        TerrainMap visited =
-                visitedMaps.computeIfAbsent(map.getName(), name -> nullMap(name, map.width(), map.height()));
-        boolean result = visited.modifyAt(x, y, TerrainType.Town);
-=======
         // TODO: walking on lava should decrease player's health
 
         // update the visited state of this coordinate
         VisitedMap visited = visitedMaps.computeIfAbsent(map.getName(), name -> new VisitedMap());
         boolean result = visited.visit(x, y);
->>>>>>> 477612be6ec068d183bc80956f5ae4101ad820b5
         return result;
     }
 
