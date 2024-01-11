@@ -108,43 +108,10 @@ usage: <options>
  -m,--map <arg>          the main map name to load
 ```
 
-# Goal 1: fix movement
+# Key game code concepts
 
-At the moment the player can move across any terrain. A player should not be able to move onto
-**Mountain** or **Water** terrain, however. A player should be able to move onto a **Ship**, and
-then board that ship, and then move to any **Water** terrain. To fix this method, complete the
-`canMoveTo(map, x, y)` method in the [Player](./src/main/java/coding101/tq/domain/Player.java)
-class. Currently the method looks like this:
-
-```java
-/**
- * Test if a player can move to a given coordinate.
- *
- * @param map the map to test
- * @param x   the x coordinate
- * @param y   the y coordinate
- * @return {@literal true} if the player is allowed to move to the coordinate
- */
-public boolean canMoveTo(TerrainMap map, int x, int y) {
-    // get terrain at the desired position so we can validate it is OK to move
-    final TerrainType newTerrain = map.terrainAt(x, y);
-
-    // test for on board a ship
-    if (onboard()) {
-        // on a ship! can only travel to another water
-        return (newTerrain == TerrainType.Water || newTerrain == TerrainType.Ship) 
-            && !vehicleLocatedAt(map, x, y);
-    }
-    // TODO: finish validation that player can move to specified coordinate
-    return true;
-}
-```
-
-> :point_up: **Note** the `// TODO` comment, which is where you should complete the implementation.
-> The `if (onboard()){}` block before that handles the logic for movement when on board a ship.
-
-> :point_down: **Continue reading** the next sections to learn about ships and the `TerrainMap`,
-> `TerrainType`, and `Player` classes you see in this method.
+This section outlines some key code concepts that the game uses, and you will need to understand
+to complete all the coding goals of this challenge.
 
 ## About the map and terrain
 
@@ -312,7 +279,7 @@ public class Player {
 }
 ```
 
-# Goal 2: player health and death by lava
+# Goal 1: player health and death by lava
 
 A player has a "health" status that is modeled as an integer on the [`Player`](./src/main/java/coding101/tq/domain/Player.java) class:
 
@@ -379,20 +346,27 @@ time a player moves to a new coordinate:
 /**
  * Mark a specific map coordinate as visited.
  *
+ * This method is automatically called by the
+ * {@link #moveTo(TerrainMap, int, int)} method. It can perform any player logic
+ * that occurs as a consequence of visiting the given coordinate, for example
+ * deducting health when visiting a "dangerous" terrain type like lava.
+ *
+ * This method maintains the {@code visitedMaps} data by calling
+ * {@link VisitedMap#visit(int, int)} with the given x,y coordinates.
+ *
  * @param map the map
  * @param x   the x coordinate
  * @param y   the y coordinate
  * @return {@code true} if the coordinate was not visited before
+ * @see #moveTo(TerrainMap, int, int)
  */
 public boolean visited(TerrainMap map, int x, int y) {
     assert map != null;
     // TODO: walking on lava should decrease player's health
 
-    // update the visited state of this coordinate by setting to a non-null value;
-    // the actual type used does not matter, we merely chose to use Town
-    TerrainMap visited = visitedMaps.computeIfAbsent(map.getName(),
-            name -> nullMap(name, map.width(), map.height()));
-    boolean result = visited.modifyAt(x, y, TerrainType.Town);
+    // update the visited state of this coordinate
+    VisitedMap visited = visitedMaps.computeIfAbsent(map.getName(), name -> new VisitedMap());
+    boolean result = visited.visit(x, y);
     return result;
 }
 ```
@@ -403,3 +377,39 @@ configuration value **if the player has visited `Lava` at the given coordinate**
 > :point_up: You do not have to worry about the final lines of code in this method, that updates the
 > `visitedMaps` data to keep track of what coordinates the player has visited. However, if you can
 > explain what that code does in plain language, you earn super bonus points!
+
+# Goal 2: fix movement
+
+At the moment the player can move across any terrain. A player should not be able to move onto
+**Mountain**, **Water**, **WallHorizontal**, **WallVertical**, or **WallCorner** terrain, however. A
+player should be able to move onto a **Ship**, and then board that ship, and then move to any
+**Water** terrain. To fix this method, complete the `canMoveTo(map, x, y)` method in the
+[Player](./src/main/java/coding101/tq/domain/Player.java) class. Currently the method looks like
+this:
+
+```java
+/**
+ * Test if a player can move to a given coordinate on a given map.
+ *
+ * @param map the map to test
+ * @param x   the x coordinate to test
+ * @param y   the y coordinate to test
+ * @return {@literal true} if the player is allowed to move to the (x,y) coordinate on {@code map}
+ */
+public boolean canMoveTo(TerrainMap map, int x, int y) {
+    // get terrain at the desired position so we can validate it is OK to move
+    final TerrainType newTerrain = map.terrainAt(x, y);
+
+    // test for on board a ship
+    if (onboard()) {
+        // on a ship! can only travel to another water
+        return (newTerrain == TerrainType.Water || newTerrain == TerrainType.Ship) 
+            && !vehicleLocatedAt(map, x, y);
+    }
+    // TODO: finish validation that player can move to specified coordinate
+    return true;
+}
+```
+
+> :point_up: **Note** the `// TODO` comment, which is where you should complete the implementation.
+> The `if (onboard()){}` block before that handles the logic for movement when on board a ship.

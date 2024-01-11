@@ -5,7 +5,10 @@ import coding101.tq.domain.Player;
 import coding101.tq.domain.Settings;
 import coding101.tq.domain.TerrainMap;
 import coding101.tq.domain.TerrainType;
+import coding101.tq.util.BitSetJson;
+import coding101.tq.util.CoordinateJson;
 import coding101.tq.util.Persistence;
+import coding101.tq.util.PlayerItemsJson;
 import coding101.tq.util.TerrainMapBuilder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -256,6 +259,10 @@ public class TextQuest {
         if (message != null) {
             ui.status().drawMessage(message, MESSAGE_CLEAR_DELAY);
         }
+
+        // update coins display
+        ui.info().drawCoins();
+
         screen.refresh();
     }
 
@@ -289,6 +296,9 @@ public class TextQuest {
                     message = bundle.getString("ship.hired");
                     player.board();
                     player.deductCoins(SHIP_COST);
+
+                    // update coins display
+                    ui.info().drawCoins();
                 } else {
                     message = bundle.getString("ship.hireDeclined");
                 }
@@ -481,6 +491,9 @@ public class TextQuest {
         mapper.setSerializationInclusion(Include.NON_NULL);
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        mapper.registerModule(CoordinateJson.createCoordinateModule());
+        mapper.registerModule(BitSetJson.createBitSetModule());
+        mapper.registerSubtypes(PlayerItemsJson.itemSubTypes());
 
         // load main map
         TerrainMap mainMap = map(cl);
