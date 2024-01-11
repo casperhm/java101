@@ -554,6 +554,10 @@ public class Player {
             return (newTerrain == TerrainType.Water || newTerrain == TerrainType.Ship) && !vehicleLocatedAt(map, x, y);
         }
         // TODO: finish validation that player can move to specified coordinate
-        return true;
+        if ((newTerrain == TerrainType.Water || newTerrain == TerrainType.Mountain) && !vehicleLocatedAt(map, x, y)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
