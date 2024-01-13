@@ -4,21 +4,24 @@ package coding101.tq;
  * Game configurable options.
  *
  * @param initialCoins             the number of coins a player should start
- *                                 with
+ *                                 with; default 20
  * @param initialHealth            the amount of health a player should start
- *                                 with
+ *                                 with; default 30
  * @param initialMaxHealth         the maximum amount of health a player should
- *                                 start with
+ *                                 start with; default 30
  * @param maxPossibleHealth        the maximum possible amount of health a
- *                                 player can achieve
+ *                                 player can achieve; default 100
  * @param lavaHealthDamage         the amount of health to deduct from a player
- *                                 when they move over lava terrain
- * @param chestCoinMaximum         the maximum number of coins a chest can
- *                                 provide
+ *                                 when they move over lava terrain; default 5
  * @param chestRewardFactor        an integer percentage (1-100) that a chest
- *                                 provides a reward, versus a penalty
+ *                                 provides a reward, versus a penalty; default
+ *                                 50
+ * @param chestCoinMaximum         the maximum number of coins a chest can
+ *                                 provide; default 100
  * @param chestHealthDamageMaximum the maximum health that a chest can damage a
- *                                 player
+ *                                 player; default 5
+ * @param revealMap                show the map, regardless if visited; defaults
+ *                                 to false
  */
 public record GameConfiguration(
         int initialCoins,
@@ -26,12 +29,13 @@ public record GameConfiguration(
         int initialMaxHealth,
         int maxPossibleHealth,
         int lavaHealthDamage,
-        int chestCoinsMaximum,
         int chestRewardFactor,
-        int chestHealthDamageMaximum) {
+        int chestCoinsMaximum,
+        int chestHealthDamageMaximum,
+        boolean revealMap) {
 
     /** The default game configuration. */
-    public static final GameConfiguration DEFAULTS = new GameConfiguration(20, 30, 30, 100, 5, 100, 50, 5);
+    public static final GameConfiguration DEFAULTS = new GameConfiguration(20, 30, 30, 100, 5, 100, 50, 5, false);
 
     /**
      * Get a new configuration with a specific number of initial coins.
@@ -48,7 +52,8 @@ public record GameConfiguration(
                 lavaHealthDamage,
                 chestCoinsMaximum,
                 chestRewardFactor,
-                chestHealthDamageMaximum);
+                chestHealthDamageMaximum,
+                revealMap);
     }
 
     /**
@@ -66,7 +71,8 @@ public record GameConfiguration(
                 lavaHealthDamage,
                 chestCoinsMaximum,
                 chestRewardFactor,
-                chestHealthDamageMaximum);
+                chestHealthDamageMaximum,
+                revealMap);
     }
 
     /**
@@ -85,7 +91,8 @@ public record GameConfiguration(
                 lavaHealthDamage,
                 chestCoinsMaximum,
                 chestRewardFactor,
-                chestHealthDamageMaximum);
+                chestHealthDamageMaximum,
+                revealMap);
     }
 
     /**
@@ -104,6 +111,26 @@ public record GameConfiguration(
                 lavaHealthDamage,
                 chestCoinsMaximum,
                 chestRewardFactor,
-                chestHealthDamageMaximum);
+                chestHealthDamageMaximum,
+                revealMap);
+    }
+
+    /**
+     * Get a new configuration with a specific reveal map flag.
+     *
+     * @param revealMap true to reveal the map
+     * @return the new configuration
+     */
+    public GameConfiguration withRevealMap(boolean revealMap) {
+        return new GameConfiguration(
+                initialCoins,
+                initialHealth,
+                initialMaxHealth,
+                maxPossibleHealth,
+                lavaHealthDamage,
+                chestCoinsMaximum,
+                chestRewardFactor,
+                chestHealthDamageMaximum,
+                revealMap);
     }
 }
