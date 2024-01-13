@@ -262,11 +262,27 @@ public class TextQuest {
             final GameConfiguration config = player.config();
             int coinsFound = 0;
             int damageTaken = 0;
+            boolean trap;
 
-            // TODO: open chest and deal with outcome: damage vs coins; decide first if
-            // the chest provides coins or deducts health. Then decide either how many
-            // coins to reward with, or health to deduct from, the player, updating the
-            // coinsFound or damageTaken variables appropriately.
+            double outPut = (Math.random() * 100);
+            int roundedOutPut = (int) Math.round(outPut);
+
+            // Decide wheater to give coins or pain
+            if (roundedOutPut >= config.chestRewardFactor()) {
+                trap = true;
+            } else {
+                trap = false;
+            }
+
+            // givineing coins
+            if (trap) {
+                outPut = (Math.random() * config.chestCoinsMaximum());
+                coinsFound = (int) Math.round(outPut);
+            } else {
+                // gieving damagef
+                outPut = (Math.random() * config.chestHealthDamageMaximum());
+                damageTaken = (int) Math.round(outPut);
+            }
 
             if (coinsFound > 0) {
                 message = MessageFormat.format(bundle.getString("chest.coinsAcquired"), coinsFound);
