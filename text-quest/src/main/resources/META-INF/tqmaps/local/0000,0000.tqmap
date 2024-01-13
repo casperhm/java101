@@ -1,0 +1,70 @@
+# Size: 100x100
+#
+#   A mountain        O cave
+#   m hill            & ship
+#   ~ water           * town
+#   , sand
+#   . grass
+#   ^ forest
+#   = lava
+#   " lava rock
+#
+#- start: 26,44
+#
+#        1         2         3         4         5         6         7         8         9         C
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAAAAAAAAAAA
+AAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAAAAAAAAAAA
+AAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*^^^^^^^^^^^^^^^^^^^^^^^^AAAAAAAAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~&~~~~~~~^^^^^^^^^^^^^^^^^AAAAAAAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^AAAAAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^AAAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^AAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~O~~~~~~~~~~~~~~~~~^^^^^^^^^^^AAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^AAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^AAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^AAAAAAAAAAAA
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~^^^^^^^^^^^^^^^^OAAAAAAAAAA................
+AA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^^^^^AAAAAAAAAAAO..........................
+AAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^AA~~AAAAAAAAAAAAAAAAAAAAAAA~~~~~~~~~~~~~~~.....................
+AAAAA^^^^^^^^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~~AAAAAAAAAAAAAAAAAAAA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*..............
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~AAAAAAAAAAAAAAAAAA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~&~~~~~~~~~............
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~~AAAAAAAAAAAA^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~......
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~AAAAAAAA^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~......
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.......
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AAAAAAAAAAAAAAAAAA................OAAAAAAAAAAAAAAAAAAAAAA~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~
+AAAAAAAAAAAA........................AAAAAAAAAAAAAAAAAAAA...~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~
+AAAAAAAAAA..........................AAAAAAAAAAAAAAAAAAA....~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~
+AAAAAAAAAA...........................AAAAAAAAAAAAAAAAA.....~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~^^^^^^^^^^^
+AAAAAAAA................................AAAAAAAAAAAA.........~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~
+AAAAAAAA................................AAAAAAA..............~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~
+AAAAAAAA..................................AA.................~~~^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~
+AAAAAAA.......................................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AAAAAAA.......................................................~~~~~~~
+AAAAAA........................................................~~
+AAAAAA..................................===...................~~
+AAAAAA..................................===...................~~
+AAAAA..........................................................~~
+AAAA............................................................~~~
+AAAA..............................................................~~
+AAA...............................................................~~~
+AA.................................................................~~~
+AA.................................................................&~~~
+AA^^^^^..............................................................~~
+AA^^^^^^^^^..........................................................~~
+AAA^^^^^^^^^^............*...........................................~~~
+AAAA^^^^^^^^^^^^^^^...................................................~~~
+AAAAA^^^^^^^^^^^^^^^^..................................................~~~
+AAAAA^^^^^^^^^^^^^^^^^^^^^.............................................~~~~~
+AAAAAA^^^^^^^^^^^^^^^^^^^^^^^..............................................~~~~~	
+AAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^...........................^^^^...............~~~~~~
+AAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^.......................^^^^^^..................~~~~~
+AAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.............^^^^^^^^^^....................~~
+AAAAAAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...................~~	
+AAAAAAAAAAAAAAAAAAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...................~~~
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
