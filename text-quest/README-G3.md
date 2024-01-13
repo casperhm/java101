@@ -21,7 +21,7 @@ which the randomness can be obtained.
 ## Fast & cheap randomness
 
 In Java the `Math.random()` method is a **low-quality** and fast method for generating random
-**double** values. It returns a pseudorandom number in the range **>= 0.0 and  <1.0**. It turns out
+**double** values. It returns a pseudorandom number in the range **>= 0.0 and <1.0**. It turns out
 having a random value beween 0 and 1 is quite useful, as you can think of this as being a **random
 fraction**.
 
@@ -66,7 +66,7 @@ public class CoinToss {
                 } else if (rand >= 0.5 && !guessTails) {
                     System.out.println("Correct, it was heads (>= 0.5)!");
                 } else {
-                    System.out.println("Oops, it was " 
+                    System.out.println("Oops, it was "
                         + (rand < 0.5 ? "tails" : "heads")
                         + ". Try again!");
                 }
@@ -120,12 +120,12 @@ summoning your math teacher for assistance. Either way, bravo! You figured out y
 number between 0 and `chestCoinMaximum`. The result would be a decimal, but we can round the value
 to a nice integer to get whole integers between 0 and `chestCoinMaximum`. For example:
 
-| Random Double | Chest Coin Maximum | Scary Math | Result | Rounded |
-|:--------------|:-------------------|:-----------|:-------|:--------|
-| 0.0           | 10                 | `0.0 × 10` | 0.0 | 0 |
-| 0.2           | 10                 | `0.2 × 10` | 2.0 | 2 |
-| 0.8           | 10                 | `0.8 × 10` | 8.0 | 8 |
-| 0.99999999    | 10                 | `0.99999999 × 10` | 9.99999999 | 10 |
+| Random Double | Chest Coin Maximum | Scary Math        | Result     | Rounded |
+| :------------ | :----------------- | :---------------- | :--------- | :------ |
+| 0.0           | 10                 | `0.0 × 10`        | 0.0        | 0       |
+| 0.2           | 10                 | `0.2 × 10`        | 2.0        | 2       |
+| 0.8           | 10                 | `0.8 × 10`        | 8.0        | 8       |
+| 0.99999999    | 10                 | `0.99999999 × 10` | 9.99999999 | 10      |
 
 In Java the `Math.random()` method can round a `double` value into a `long` value. When you only
 want an `int` you can **cast** a `long` into an `int` by adding `(int)` in front of the value you
@@ -147,7 +147,6 @@ public class DynamicRandomRange {
 
     public static int randomIntFromZeroTo(int max) {
         // TODO: implement this method by generating a random integer between 0 and max
-        return 0;
     }
 
     public static void main(String[] args) throws IOException {

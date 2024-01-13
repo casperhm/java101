@@ -8,8 +8,10 @@ import java.io.IOException;
 public class DynamicRandomRange {
 
     public static int randomIntFromZeroTo(int max) {
-        // TODO: implement this method by generating a random integer between 0 and max
-        return 0;
+        double outPut = (Math.random() * max);
+        int roundedOutPut = (int) Math.round(outPut);
+
+        return roundedOutPut;
     }
 
     public static void main(String[] args) throws IOException {
