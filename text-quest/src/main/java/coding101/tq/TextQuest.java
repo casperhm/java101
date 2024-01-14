@@ -4,7 +4,9 @@ import static coding101.tq.util.CommandLineGameConfiguration.printErrorAndExit;
 
 import coding101.tq.domain.ColorScheme;
 import coding101.tq.domain.Player;
+import coding101.tq.domain.PlayerItems;
 import coding101.tq.domain.Settings;
+import coding101.tq.domain.Shop;
 import coding101.tq.domain.TerrainMap;
 import coding101.tq.domain.TerrainType;
 import coding101.tq.util.BitSetJson;
@@ -191,7 +193,10 @@ public class TextQuest {
             if ((newX != player.getX() || newY != player.getY()) && player.canMoveTo(activeMap, newX, newY)) {
                 // move player
                 if (newX >= 0 && newY >= 0 && newX < activeMap.width() && newY < activeMap.height()) {
-                    ui.map().movePlayer(newX, newY);
+                    if (ui.map().movePlayer(newX, newY)) {
+                        // moved to new coordinate; add XP
+                        player.addXp(player.config().xp().exploreXp());
+                    }
 
                     // redraw health in case that changed
                     ui.health().draw();
@@ -214,6 +219,7 @@ public class TextQuest {
                         case Cave -> interactWithCave();
                         case Chest -> interactWithChest();
                         case Ship, Water -> interactWithShip();
+                        case Shop -> interactWithShop();
                         case Town -> interactWithTown();
                         default -> {
                             // nothing to do
@@ -295,6 +301,9 @@ public class TextQuest {
             } else {
                 message = bundle.getString("chest.empty");
             }
+
+            // earn XP
+            player.addXp(config.xp().chestXp());
         } else {
             // show message that chest has already been opened
             message = bundle.getString("chest.alreadyOpened");
@@ -369,6 +378,22 @@ public class TextQuest {
         }
     }
 
+    private void interactWithShop() throws IOException {
+        if (ui.shop() != null) {
+            // leave the shop
+            ui.endShop();
+            ui.status().drawMessage(bundle.getString("shop.left"), MESSAGE_CLEAR_DELAY);
+            // TODO: shop interactions
+        } else {
+            final int x = player.getX();
+            final int y = player.getY();
+            final Shop shop = activeMap.shopAt(x, y, game);
+            ui.startShop(shop);
+            ui.status().drawMessage(bundle.getString("shop.entered"), MESSAGE_CLEAR_DELAY);
+        }
+        screen.refresh();
+    }
+
     private TerrainMap loadChildMap(String mapName) {
         return TerrainMapBuilder.parseResources("META-INF/tqmaps/%s/%s".formatted(mainMap.getName(), mapName))
                 .build(mapName);
@@ -418,6 +443,14 @@ public class TextQuest {
         return null;
     }
 
+    private static Terminal createTerminal(GameConfiguration config) throws IOException {
+        DefaultTerminalFactory tf = new DefaultTerminalFactory();
+        if (config.gui()) {
+            return tf.createTerminalEmulator();
+        }
+        return tf.createTerminal();
+    }
+
     public static void main(String[] args) {
         // parse arguments
         CommandLine cl = commandLine(args);
@@ -441,7 +474,8 @@ public class TextQuest {
 
         // create game settings
         ColorScheme colors = CommandLineGameConfiguration.colors(cl, mapper);
-        Settings settings = new Settings(colors);
+        PlayerItems items = CommandLineGameConfiguration.items(cl, mapper);
+        Settings settings = new Settings(colors, items);
 
         // create game configuration
         GameConfiguration config = CommandLineGameConfiguration.parseConfiguration(cl);
@@ -467,7 +501,7 @@ public class TextQuest {
         // free CommandLine
         cl = null;
 
-        try (Terminal terminal = new DefaultTerminalFactory().createTerminal()) {
+        try (Terminal terminal = createTerminal(config)) {
             TerminalSize screenSize = terminal.getTerminalSize();
             if (screenSize.getColumns() < 30 || screenSize.getRows() < 10) {
                 printErrorAndExit("Terminal must be at least 30x10.");

@@ -20,8 +20,11 @@ package coding101.tq;
  *                                 provide; default 100
  * @param chestHealthDamageMaximum the maximum health that a chest can damage a
  *                                 player; default 5
+ * @param xp                       the experience points configuration; defaults
+ *                                 to {@link GameXpConfiguration#DEFAULTS}
  * @param revealMap                show the map, regardless if visited; defaults
  *                                 to false
+ * @param gui                      use the texture image renderer
  */
 public record GameConfiguration(
         int initialCoins,
@@ -32,20 +35,24 @@ public record GameConfiguration(
         int chestRewardFactor,
         int chestCoinsMaximum,
         int chestHealthDamageMaximum,
-        boolean revealMap) {
+        GameXpConfiguration xp,
+        GameShopConfiguration shop,
+        boolean revealMap,
+        boolean gui) {
 
     /** The default game configuration. */
-    public static final GameConfiguration DEFAULTS = new GameConfiguration(20, 30, 30, 100, 5, 100, 50, 5, false);
+    public static final GameConfiguration DEFAULTS = new GameConfiguration(
+            20, 30, 30, 100, 5, 100, 50, 5, GameXpConfiguration.DEFAULTS, GameShopConfiguration.DEFAULTS, false, false);
 
     /**
      * Get a new configuration with a specific number of initial coins.
      *
-     * @param coins the initial coins to configure
+     * @param initialCoins the initial coins to configure
      * @return the new configuration
      */
-    public GameConfiguration withInitialCoins(int coins) {
+    public GameConfiguration withInitialCoins(int initialCoins) {
         return new GameConfiguration(
-                coins,
+                initialCoins,
                 initialHealth,
                 initialMaxHealth,
                 maxPossibleHealth,
@@ -53,7 +60,32 @@ public record GameConfiguration(
                 chestCoinsMaximum,
                 chestRewardFactor,
                 chestHealthDamageMaximum,
-                revealMap);
+                xp,
+                shop,
+                revealMap,
+                gui);
+    }
+
+    /**
+     * Get a new configuration with a specific number of initial experience points.
+     *
+     * @param xp the initial experience points to configure
+     * @return the new configuration
+     */
+    public GameConfiguration withInitialXp(int xp) {
+        return new GameConfiguration(
+                initialCoins,
+                initialHealth,
+                initialMaxHealth,
+                maxPossibleHealth,
+                lavaHealthDamage,
+                chestCoinsMaximum,
+                chestRewardFactor,
+                chestHealthDamageMaximum,
+                new GameXpConfiguration(xp, this.xp.exploreXp(), this.xp.chestXp()),
+                shop,
+                revealMap,
+                gui);
     }
 
     /**
@@ -72,7 +104,10 @@ public record GameConfiguration(
                 chestCoinsMaximum,
                 chestRewardFactor,
                 chestHealthDamageMaximum,
-                revealMap);
+                xp,
+                shop,
+                revealMap,
+                gui);
     }
 
     /**
@@ -92,7 +127,10 @@ public record GameConfiguration(
                 chestCoinsMaximum,
                 chestRewardFactor,
                 chestHealthDamageMaximum,
-                revealMap);
+                xp,
+                shop,
+                revealMap,
+                gui);
     }
 
     /**
@@ -112,7 +150,10 @@ public record GameConfiguration(
                 chestCoinsMaximum,
                 chestRewardFactor,
                 chestHealthDamageMaximum,
-                revealMap);
+                xp,
+                shop,
+                revealMap,
+                gui);
     }
 
     /**
@@ -131,6 +172,31 @@ public record GameConfiguration(
                 chestCoinsMaximum,
                 chestRewardFactor,
                 chestHealthDamageMaximum,
-                revealMap);
+                xp,
+                shop,
+                revealMap,
+                gui);
+    }
+
+    /**
+     * Get a new configuration with a specific GUI flag.
+     *
+     * @param gui true to use the texture image renderer
+     * @return the new configuration
+     */
+    public GameConfiguration withGui(boolean gui) {
+        return new GameConfiguration(
+                initialCoins,
+                initialHealth,
+                initialMaxHealth,
+                maxPossibleHealth,
+                lavaHealthDamage,
+                chestCoinsMaximum,
+                chestRewardFactor,
+                chestHealthDamageMaximum,
+                xp,
+                shop,
+                revealMap,
+                gui);
     }
 }

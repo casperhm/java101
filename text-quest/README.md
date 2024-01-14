@@ -104,7 +104,10 @@ usage: <options>
  -C,--chest-coins <arg>    maximum number of coins a chest can provide
  -d,--map-dir <arg>        the main map directory path
  -f,--save-file <arg>      the save file path to use
+ -g,--gui                  use the image texture GUI renderer
  -h,--help                 show usage information
+ -I,--items-dir <arg>      the items directory path
+ -i,--items <arg>          the items name to load
  -K,--colors-dir <arg>     the colors directory path
  -k,--colors <arg>         the colors name to load
  -l,--chest-luck <arg>     a percentage from 1-100 that a chest will
@@ -113,6 +116,7 @@ usage: <options>
  -P,--chest-damage <arg>   the maximum amount of health a chest can damage
                            the player
  -r,--reveal-map           make the map completely visible
+ -x,--xp <arg>             starting experience points
 ```
 
 # Key game code concepts
@@ -638,3 +642,4 @@ Here are the goals of this coding challenge:
  2. [Hitting a wall](./README-G2.md) (fix movement)
  3. [Randomness](./README-G3.md) (oh but I digress)
  4. [Risky business](./README-G4.md) (opening chests)
+ 5. [Lists and iterations](./README-G5.md) (working with lists)

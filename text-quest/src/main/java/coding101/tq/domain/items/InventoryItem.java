@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * An item a player can possess.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-public interface InventoryItem {
+public interface InventoryItem extends Cloneable {
 
     /**
      * Get the name of the item.
@@ -23,6 +23,22 @@ public interface InventoryItem {
      * @return the type of item
      */
     ItemType type();
+
+    /**
+     * Get the cost to purchase this item, in coins.
+     *
+     * @return the cost to purchase, in coins
+     */
+    int price();
+
+    /**
+     * Get the minimum experience points required for a player to use.
+     *
+     * @return the minimum experience points required
+     */
+    default int minimumXp() {
+        return 0;
+    }
 
     /**
      * Test if the item can be equipped (activated) on the player, such as a piece
@@ -131,4 +147,11 @@ public interface InventoryItem {
     default boolean travelOn(TerrainType terrain) {
         return false;
     }
+
+    /**
+     * Clone this item into a new instance.
+     *
+     * @return the cloned instance
+     */
+    InventoryItem clone();
 }

@@ -3,6 +3,7 @@ package coding101.tq.util;
 import coding101.tq.GameConfiguration;
 import coding101.tq.TextQuest;
 import coding101.tq.domain.ColorScheme;
+import coding101.tq.domain.PlayerItems;
 import coding101.tq.domain.TerrainMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -41,6 +42,12 @@ public final class CommandLineGameConfiguration {
     /** The help CLI option. */
     public static final char OPT_HELP = 'h';
 
+    /** The items directory CLI option. */
+    public static final char OPT_ITEMS_DIR = 'I';
+
+    /** The items name CLI option. */
+    public static final char OPT_ITEMS_NAME = 'i';
+
     /** The map root directory path CLI option. */
     public static final char OPT_MAIN_MAP_DIR = 'd';
 
@@ -52,6 +59,12 @@ public final class CommandLineGameConfiguration {
 
     /** The "reveal map" flag CLI option. */
     public static final char OPT_REVEAL_MAP = 'r';
+
+    /** The GUI flag option. */
+    public static final char OPT_GUI = 'g';
+
+    /** The experience points option. */
+    public static final char OPT_XP = 'x';
 
     private CommandLineGameConfiguration() {
         // not available
@@ -99,6 +112,11 @@ public final class CommandLineGameConfiguration {
                 .hasArg()
                 .desc("the maximum amount of health a chest can damage the player")
                 .build());
+        options.addOption(Option.builder(String.valueOf(OPT_XP))
+                .longOpt("xp")
+                .hasArg()
+                .desc("starting experience points")
+                .build());
         options.addOption(Option.builder(String.valueOf(OPT_COLORS_DIR))
                 .longOpt("colors-dir")
                 .hasArg()
@@ -108,6 +126,16 @@ public final class CommandLineGameConfiguration {
                 .longOpt("colors")
                 .hasArg()
                 .desc("the colors name to load")
+                .build());
+        options.addOption(Option.builder(String.valueOf(OPT_ITEMS_DIR))
+                .longOpt("items-dir")
+                .hasArg()
+                .desc("the items directory path")
+                .build());
+        options.addOption(Option.builder(String.valueOf(OPT_ITEMS_NAME))
+                .longOpt("items")
+                .hasArg()
+                .desc("the items name to load")
                 .build());
         options.addOption(Option.builder(String.valueOf(OPT_MAIN_MAP_DIR))
                 .longOpt("map-dir")
@@ -127,6 +155,10 @@ public final class CommandLineGameConfiguration {
         options.addOption(Option.builder(String.valueOf(OPT_REVEAL_MAP))
                 .longOpt("reveal-map")
                 .desc("make the map completely visible")
+                .build());
+        options.addOption(Option.builder(String.valueOf(OPT_GUI))
+                .longOpt("gui")
+                .desc("use the image texture GUI renderer")
                 .build());
         return options;
     }
@@ -169,7 +201,7 @@ public final class CommandLineGameConfiguration {
         if (cl.hasOption(OPT_COLORS_DIR)) {
             colorSchemeDir = cl.getOptionValue(OPT_COLORS_DIR);
         }
-        String colorScheme = "default";
+        String colorScheme = "main";
         if (cl.hasOption(OPT_COLORS_NAME)) {
             colorScheme = cl.getOptionValue(OPT_COLORS_NAME);
         }
@@ -186,6 +218,47 @@ public final class CommandLineGameConfiguration {
             printErrorAndExit("Color scheme file %s not found!".formatted(colorScheme));
         } catch (IOException e) {
             printErrorAndExit("Error reading color scheme %s: %s".formatted(colorScheme, e.getMessage()));
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the player items to use.
+     *
+     * @param cl     the command line
+     * @param mapper the JSON mapper
+     * @return the items
+     */
+    public static PlayerItems items(CommandLine cl, ObjectMapper mapper) {
+        // load color scheme
+        String itemsDir = "META-INF/tqitems";
+        if (cl.hasOption(OPT_COLORS_DIR)) {
+            itemsDir = cl.getOptionValue(OPT_ITEMS_DIR);
+        }
+        String itemsName = "main";
+        if (cl.hasOption(OPT_COLORS_NAME)) {
+            itemsName = cl.getOptionValue(OPT_ITEMS_NAME);
+        }
+        InputStream in =
+                TextQuest.class.getClassLoader().getResourceAsStream("%s/%s.json".formatted(itemsDir, itemsName));
+        try {
+            if (in == null) {
+                // try as file path
+                in = Files.newInputStream(Paths.get(itemsDir, itemsName));
+            }
+            return mapper.readValue(in, PlayerItems.class);
+        } catch (NoSuchFileException e) {
+            printErrorAndExit("Items file %s not found!".formatted(itemsName));
+        } catch (IOException e) {
+            printErrorAndExit("Error reading items %s: %s".formatted(itemsName, e.getMessage()));
         } finally {
             if (in != null) {
                 try {
@@ -252,12 +325,28 @@ public final class CommandLineGameConfiguration {
                 }
                 config = config.withChestHeathDamageMaximum(max);
             } catch (Exception e) {
-                printErrorAndExit("The --chest-damage argument must be a number greater than 0.");
+                printErrorAndExit("The --chest-damage argument must be a number 0 or more.");
+            }
+        }
+
+        if (cl.hasOption(OPT_XP)) {
+            try {
+                int xp = Integer.parseInt(cl.getOptionValue(OPT_XP));
+                if (xp < 0) {
+                    throw new IllegalArgumentException();
+                }
+                config = config.withInitialXp(xp);
+            } catch (Exception e) {
+                printErrorAndExit("The --xp argument must be a number 0 or more.");
             }
         }
 
         if (cl.hasOption(OPT_REVEAL_MAP)) {
             config = config.withRevealMap(true);
+        }
+
+        if (cl.hasOption(OPT_GUI)) {
+            config = config.withGui(true);
         }
 
         return config;
