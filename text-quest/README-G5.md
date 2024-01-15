@@ -291,6 +291,86 @@ public static class LinkedList<T> {
 
 Note the `head` field which is a `LinkedListElement<T>` object, the same class as discussed earlier.
 
+Here is an example run of the `LinkedLists` program:
+
+```
+Word list has 0 items: []
+
+Type 'a <word>' or 'r <word>' to add/remove words.
+Type 'I <word1> <word2>' to insert <word1> before <word2>.
+Type 'i <word1> <word2>' to insert <word1> after <word2>.
+Type 'b' or 'c' to reverse/clear the list.
+Command: a a
+Item [a] added.
+
+Word list has 1 items: [
+    1. a
+]
+
+Command: a b
+Item [b] added.
+
+Word list has 2 items: [
+    1. a
+    2. b
+]
+
+Command: b
+The list is reversed.
+
+Word list has 2 items: [
+    1. b
+    2. a
+]
+
+Command: i c b
+Item [c] inserted after [b].
+
+Word list has 3 items: [
+    1. b
+    2. c
+    3. a
+]
+
+Command: I d a
+Item [d] inserted before [a].
+
+Word list has 4 items: [
+    1. b
+    2. c
+    3. d
+    4. a
+]
+
+Command: r b
+Item [b] removed.
+
+Word list has 3 items: [
+    1. c
+    2. d
+    3. a
+]
+```
+
+### Linked list unit tests
+
+You can also verify your code by running the
+[`LinkedListTests`](./src/test/java/coding101/tq/example/LinkedListTests.java) **unit tests**. Unit
+tests are code that run and verify other code, and are used by programmers to validate their code
+works as expected.
+
+You can execute the tests easily in VS Code, by clicking the green arrows that appear in the
+`LinkedListTests` class, or right-click to execute the tests in the debugger:
+
+<img alt="VS Code unit test class" src="./docs/linked-list-unit-test@2x.png" width="986">
+
+The success or failure of each test method will then appear:
+
+<img alt="VS Code unit test outcome" src="./docs/linked-list-unit-test-outcome@2x.png" width="1087">
+
+> :fire: To succeed fully on this exercise, all `LinkedListTests` tests must **pass** (run
+> successfully).
+
 ### Task 1: add to end of list
 
 Implement the `add(item)` method, which should add `item` to the **end** of the list:
