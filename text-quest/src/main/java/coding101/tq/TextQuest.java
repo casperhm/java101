@@ -502,6 +502,7 @@ public class TextQuest {
         cl = null;
 
         try (Terminal terminal = createTerminal(config)) {
+
             TerminalSize screenSize = terminal.getTerminalSize();
             if (screenSize.getColumns() < 30 || screenSize.getRows() < 10) {
                 printErrorAndExit("Terminal must be at least 30x10.");
