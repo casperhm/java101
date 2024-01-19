@@ -3,12 +3,14 @@ package coding101.tq;
 import static coding101.tq.util.CommandLineGameConfiguration.printErrorAndExit;
 
 import coding101.tq.domain.ColorScheme;
+import coding101.tq.domain.Coordinate;
 import coding101.tq.domain.Player;
 import coding101.tq.domain.PlayerItems;
 import coding101.tq.domain.Settings;
 import coding101.tq.domain.Shop;
 import coding101.tq.domain.TerrainMap;
 import coding101.tq.domain.TerrainType;
+import coding101.tq.domain.items.InventoryItem;
 import coding101.tq.util.BitSetJson;
 import coding101.tq.util.CommandLineGameConfiguration;
 import coding101.tq.util.CoordinateJson;
@@ -35,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -59,6 +62,7 @@ public class TextQuest {
 
     private static char INTERACT_KEY = ' ';
     private static char SAVE_KEY = 's';
+    private static char EQUIP_KEY = 'e';
 
     private final Screen screen;
     private final Settings settings;
@@ -144,6 +148,43 @@ public class TextQuest {
             }
             return false;
         }
+
+        @Override
+        public char readCharacter() throws IOException {
+            KeyStroke keyStroke = screen.readInput();
+            KeyType keyType = keyStroke != null ? keyStroke.getKeyType() : null;
+            if (keyType == KeyType.Character) {
+                return keyStroke.getCharacter();
+            }
+            return 0;
+        }
+
+        @Override
+        public Integer readInteger(int x, int y) throws IOException {
+            StringBuilder buf = new StringBuilder();
+            while (true) {
+                KeyStroke keyStroke = screen.readInput();
+                KeyType keyType = keyStroke != null ? keyStroke.getKeyType() : null;
+                if (keyType == KeyType.Character) {
+                    final char c = keyStroke.getCharacter();
+                    if (c >= '0' && c <= '9') {
+                        buf.append(c);
+                        ui.status().drawCharacter(x++, y, c);
+                        screen().refresh();
+                    }
+                } else if (keyType == KeyType.Enter) {
+                    break;
+                }
+            }
+            if (!buf.isEmpty()) {
+                try {
+                    return Integer.valueOf(buf.toString());
+                } catch (NumberFormatException e) {
+                    // ignore and continue
+                }
+            }
+            return null;
+        }
     }
 
     private void setSavePath(Path path) {
@@ -228,6 +269,12 @@ public class TextQuest {
                 } else if (key == SAVE_KEY) {
                     // save game
                     saveGame();
+                } else if (key == EQUIP_KEY) {
+                    if (keyStroke.isShiftDown()) {
+                        stashItem();
+                    } else {
+                        equipItem();
+                    }
                 }
             }
         }
@@ -379,18 +426,143 @@ public class TextQuest {
     }
 
     private void interactWithShop() throws IOException {
-        if (ui.shop() != null) {
-            // leave the shop
-            ui.endShop();
-            ui.status().drawMessage(bundle.getString("shop.left"), MESSAGE_CLEAR_DELAY);
-            // TODO: shop interactions
-        } else {
-            final int x = player.getX();
-            final int y = player.getY();
-            final Shop shop = activeMap.shopAt(x, y, game);
-            ui.startShop(shop);
-            ui.status().drawMessage(bundle.getString("shop.entered"), MESSAGE_CLEAR_DELAY);
+        final int x = player.getX();
+        final int y = player.getY();
+        final Shop shop = activeMap.shopAt(x, y, game);
+        ui.startShop(shop);
+        while (true) {
+            ui.status().drawMessage(bundle.getString("shop.buyOrSell"), -1);
+            screen.refresh();
+            char action = Character.toLowerCase(game.readCharacter());
+            if (action == 'b') {
+                Coordinate inputPosition = ui.status().drawMessage(bundle.getString("shop.chooseItemToBuy"), -1);
+                screen.refresh();
+                Integer choice = game.readInteger(inputPosition.x() + 1, inputPosition.y());
+                if (choice == null || choice < 1 || choice > shop.itemsForSale().size()) {
+                    ui.status().drawMessage(bundle.getString("shop.invalidChoice"), -1);
+                    screen.refresh();
+                    game.readYesNo();
+                } else {
+                    InventoryItem itemToPurchase = shop.itemsForSale().get(choice - 1);
+                    if (itemToPurchase.price() > player.getCoins()) {
+                        // not enough coins to purchase
+                        ui.status().drawMessage(bundle.getString("shop.insufficentFunds"), -1);
+                        screen.refresh();
+                        game.readYesNo();
+                    } else {
+                        shop.purchase(itemToPurchase);
+                        ui.status().drawMessage(bundle.getString("shop.purchasedItem"), -1);
+                        ui.shop().draw();
+                        ui.info().draw();
+                        screen.refresh();
+                        game.readYesNo();
+                    }
+                }
+            } else if (action == 's') {
+                List<InventoryItem> nonEquippedItems = player.getItems().getItems().stream()
+                        .filter(item -> !item.isEquipped())
+                        .toList();
+                InventoryItem itemToSell = null;
+                if (nonEquippedItems.isEmpty()) {
+                    ui.status().drawMessage(bundle.getString("shop.nothingToSell"), -1);
+                    screen.refresh();
+                    game.readYesNo();
+                    continue;
+                } else if (nonEquippedItems.size() == 1) {
+                    // only one item to sell, jump right to that
+                    itemToSell = nonEquippedItems.getFirst();
+                } else {
+                    Coordinate inputPosition = ui.status().drawMessage(bundle.getString("shop.chooseItemToSell"), -1);
+                    screen.refresh();
+                    Integer choice = game.readInteger(inputPosition.x() + 1, inputPosition.y());
+                    if (choice != null) {
+                        if (choice > 0 && choice <= shop.itemsForSale().size()) {
+                            itemToSell = nonEquippedItems.get(choice - 1);
+                        } else {
+                            ui.status().drawMessage(bundle.getString("shop.invalidChoice"), -1);
+                            screen.refresh();
+                            game.readYesNo();
+                        }
+                    }
+                }
+                if (itemToSell != null) {
+                    int purchasePrice = shop.sellItemPrice(itemToSell);
+                    ui.status()
+                            .drawMessage(
+                                    MessageFormat.format(
+                                            bundle.getString("shop.purchaseOffer"), purchasePrice, itemToSell.name()),
+                                    -1);
+                    if (game.readYesNo()) {
+                        shop.sell(itemToSell);
+                        ui.info().draw();
+                        ui.status().drawMessage(bundle.getString("shop.sold"), -1);
+                        screen.refresh();
+                        game.readYesNo();
+                    }
+                }
+            } else {
+                // leave the shop
+                ui.endShop();
+                ui.status().drawMessage(bundle.getString("shop.left"), MESSAGE_CLEAR_DELAY);
+                break;
+            }
         }
+        screen.refresh();
+    }
+
+    private void equipItem() throws IOException {
+        var equipableItems = ui.info().equipableItemsByType().values().stream()
+                .flatMap(list -> list.stream())
+                .toList();
+        if (equipableItems.isEmpty()) {
+            ui.status().drawMessage(bundle.getString("inventory.equip.noneAvailable"), MESSAGE_CLEAR_DELAY);
+        } else {
+            Coordinate inputPosition = ui.status().drawMessage(bundle.getString("inventory.equip.choose"), -1);
+            screen.refresh();
+            Integer choice = game.readInteger(inputPosition.x() + 1, inputPosition.y());
+            if (choice != null) {
+                if (choice > 0 && choice <= equipableItems.size()) {
+                    var itemToEquip = equipableItems.get(choice - 1);
+                    player.getItems().apply(itemToEquip, player);
+                    ui.info().drawItems();
+                    ui.health().draw();
+                    ui.status().drawMessage("", -1);
+                    screen.refresh();
+                } else {
+                    ui.status().drawMessage(bundle.getString("inventory.invalidChoice"), MESSAGE_CLEAR_DELAY);
+                    screen.refresh();
+                    game.readYesNo();
+                }
+            }
+        }
+        screen.refresh();
+    }
+
+    private void stashItem() throws IOException {
+        var stashableItems = ui.info().equippedItemsByType().values().stream()
+                .flatMap(list -> list.stream())
+                .toList();
+        if (stashableItems.isEmpty()) {
+            ui.status().drawMessage(bundle.getString("inventory.stash.noneAvailable"), MESSAGE_CLEAR_DELAY);
+        } else {
+            Coordinate inputPosition = ui.status().drawMessage(bundle.getString("inventory.stash.choose"), -1);
+            screen.refresh();
+            Integer choice = game.readInteger(inputPosition.x() + 1, inputPosition.y());
+            if (choice != null) {
+                if (choice > 0 && choice <= stashableItems.size()) {
+                    var itemToStash = stashableItems.get(choice - 1);
+                    player.getItems().stash(itemToStash, player);
+                    ui.info().drawItems();
+                    ui.status().drawMessage("", -1);
+                    screen.refresh();
+                } else {
+                    ui.status().drawMessage(bundle.getString("inventory.invalidChoice"), MESSAGE_CLEAR_DELAY);
+                    screen.refresh();
+                    game.readYesNo();
+                }
+            }
+        }
+        screen.refresh();
         screen.refresh();
     }
 

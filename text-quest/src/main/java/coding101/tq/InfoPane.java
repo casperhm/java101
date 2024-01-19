@@ -89,16 +89,21 @@ public class InfoPane implements Pane {
                 .setForegroundColor(color(game.settings().colors().foreground().uiText(), ANSI.WHITE_BRIGHT));
         game.textGraphics().putString(col, row, label);
 
-        int coinDisplayCol = col + width - value.length();
+        int valueDisplayCol = col + width - value.length();
         game.textGraphics()
                 .setForegroundColor(color(game.settings().colors().foreground().uiBorder(), ANSI.WHITE));
-        for (int i = col + label.length(); i < coinDisplayCol; i++) {
+
+        // need to re-draw border in case separator moved
+        game.textGraphics().setCharacter(col - 1, row, Symbols.DOUBLE_LINE_VERTICAL);
+        game.textGraphics().setCharacter(col + width, row, Symbols.DOUBLE_LINE_VERTICAL);
+
+        for (int i = col + label.length(); i < valueDisplayCol; i++) {
             game.textGraphics().setCharacter(i, row, '.');
         }
 
         game.textGraphics()
                 .setForegroundColor(color(game.settings().colors().foreground().uiText(), ANSI.WHITE_BRIGHT));
-        game.textGraphics().putString(coinDisplayCol, row, value);
+        game.textGraphics().putString(valueDisplayCol, row, value);
     }
 
     /**
@@ -121,6 +126,34 @@ public class InfoPane implements Pane {
     }
 
     /**
+     * Get an ordered mapping of item types to associated items that are equipped on
+     * the player.
+     *
+     * This mapping mirrors what is shown in the UI.
+     *
+     * @return the equipped items grouped by type
+     */
+    public Map<ItemType, List<InventoryItem>> equippedItemsByType() {
+        return game.player().getItems().getItems().stream()
+                .filter(InventoryItem::isEquipped)
+                .collect(groupingBy(InventoryItem::type, () -> new EnumMap<>(ItemType.class), toList()));
+    }
+
+    /**
+     * Get an ordered mapping of item types to associated items that can be equipped
+     * (or used) by the player.
+     *
+     * This mapping mirrors what is shown in the UI.
+     *
+     * @return the equipped items grouped by type
+     */
+    public Map<ItemType, List<InventoryItem>> equipableItemsByType() {
+        return game.player().getItems().getItems().stream()
+                .filter(item -> !item.isEquipped())
+                .collect(groupingBy(InventoryItem::type, () -> new EnumMap<>(ItemType.class), toList()));
+    }
+
+    /**
      * Update the inventory items display.
      */
     public void drawItems() {
@@ -138,9 +171,7 @@ public class InfoPane implements Pane {
         int displayRow = top;
 
         // show equipped items by type
-        Map<ItemType, List<InventoryItem>> equippedItemsByType = allItems.stream()
-                .filter(InventoryItem::isEquipped)
-                .collect(groupingBy(InventoryItem::type, () -> new EnumMap<>(ItemType.class), toList()));
+        Map<ItemType, List<InventoryItem>> equippedItemsByType = equippedItemsByType();
         for (List<InventoryItem> typeItems : equippedItemsByType.values()) {
             for (InventoryItem item : typeItems) {
                 if (currItemIndex < displayStart) {
@@ -151,6 +182,7 @@ public class InfoPane implements Pane {
                     break;
                 }
                 String label = itemDisplayName(item);
+                label = "%d %s".formatted(currItemIndex + 1, label);
                 String value = itemDisplayValue(item);
                 drawItem(label, value, left, displayRow++);
                 currItemIndex++;
@@ -166,12 +198,14 @@ public class InfoPane implements Pane {
         game.textGraphics().setCharacter(left - 1, displayRow, Symbols.DOUBLE_LINE_T_SINGLE_RIGHT);
         game.textGraphics().drawLine(left, displayRow, right, displayRow, Symbols.SINGLE_LINE_HORIZONTAL);
         game.textGraphics().setCharacter(right + 1, displayRow, Symbols.DOUBLE_LINE_T_SINGLE_LEFT);
+
+        // redraw left/right borders in case stashed items
+        game.textGraphics().drawLine(left - 1, displayRow + 1, left - 1, bottom, Symbols.DOUBLE_LINE_VERTICAL);
+        game.textGraphics().drawLine(right + 1, displayRow + 1, right + 1, bottom, Symbols.DOUBLE_LINE_VERTICAL);
         displayRow++;
 
         // group non-equipped items by type
-        Map<ItemType, List<InventoryItem>> itemsByType = allItems.stream()
-                .filter(item -> !item.isEquipped())
-                .collect(groupingBy(InventoryItem::type, () -> new EnumMap<>(ItemType.class), toList()));
+        Map<ItemType, List<InventoryItem>> itemsByType = equipableItemsByType();
         int itemNum = 0;
         for (List<InventoryItem> typeItems : itemsByType.values()) {
             for (InventoryItem item : typeItems) {
