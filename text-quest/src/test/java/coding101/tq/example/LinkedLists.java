@@ -110,7 +110,9 @@ public class LinkedLists {
          * @param fn the callback function to call for every item in the list
          */
         public void forEach(Consumer<T> fn) {
-            // TODO: iterate over all items in the list and invoke fn.accept() on each
+            for (var element = this.head; element != null; element = element.next) {
+                fn.accept(element.item());
+            }
         }
 
         /**
