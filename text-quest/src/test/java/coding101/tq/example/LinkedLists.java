@@ -123,8 +123,9 @@ public class LinkedLists {
         public int size() {
             int size = 0;
 
-            // TODO: count and return the number of elements in the list
-
+            for (var element = this.head; element != null; element = element.next) {
+                size++;
+            }
             return size;
         }
 
