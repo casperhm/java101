@@ -138,6 +138,17 @@ public class LinkedLists {
          */
         public void insertAfter(T item, T after) {
             // TODO insert item behind after, or the end of the list if not found
+            var newElement = new LinkedListElement<T>(item);
+            for (var element = this.head; element != null; element = element.next) {
+                if (element.item.equals(after)) {
+                    newElement.next = element.next;
+                    element.next = newElement;
+                    return;
+                } else if (element.next == null) {
+                    element.next = newElement;
+                    return;
+                }
+            }
         }
 
         /**
