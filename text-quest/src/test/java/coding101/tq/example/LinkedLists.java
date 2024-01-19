@@ -90,7 +90,17 @@ public class LinkedLists {
          * @param item the item to add
          */
         public void add(T item) {
-            // TODO: add item to the end of the list
+            var newElement = new LinkedListElement<T>(item);
+            if (head != null) {
+                for (var element = this.head; element != null; element = element.next) {
+                    if (element.next == null) {
+                        element.next = newElement;
+                        return;
+                    }
+                }
+            } else {
+                head = newElement;
+            }
         }
 
         /**
